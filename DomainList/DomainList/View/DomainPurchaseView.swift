@@ -86,22 +86,17 @@ struct DomainPurchaseView: View {
                 HStack {
                     Text("Domain privacy")
                         .foregroundColor(.gray)
-                    
                     Spacer()
-                    
                     Text("Included")
                         .fontWeight(.medium)
                 }
                 HStack {
                     Text("SSL certificate")
                         .foregroundColor(.gray)
-                    
                     Spacer()
-                    
                     Text("Included")
                         .fontWeight(.medium)
                 }
-                
                 Divider()
                     .padding(.vertical)
                 HStack {
@@ -131,7 +126,7 @@ struct DomainPurchaseView: View {
                         .background(Color.black)
                         .cornerRadius(28)
                 }
-                .padding(.vertical)
+                .padding(.vertical, 15)
             }
             .padding()
             .background(Color.white)

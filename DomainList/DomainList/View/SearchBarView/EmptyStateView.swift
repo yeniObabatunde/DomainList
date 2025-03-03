@@ -14,6 +14,7 @@ struct EmptyStateView: View {
         VStack {
             Text(message)
                 .foregroundColor(.gray)
+                .fontWeight(.bold)
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

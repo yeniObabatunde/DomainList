@@ -18,10 +18,10 @@ struct Constants {
     }
     
     struct Endpooint {
-        static let search = "/domains/search/"
+        static let search = "/domains/search"
         
         static func search(query: String) -> String {
-            "/domains/search?\(query)"
+            "/domains/search\(query)"
         }
     }
     

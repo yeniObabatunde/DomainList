@@ -66,10 +66,17 @@ final class NetworkService: NetworkServiceProtocol {
                     Logger.printIfDebug(data: "Invalid response: \(response)", logType: .error)
                     throw NetworkError.noData
                 }
+                
+                if httpResponse.statusCode == 404 {
+                    Logger.printIfDebug(data: "Server error: 404 - Domain not found", logType: .error)
+                    throw NetworkError.notFound
+                }
+                
                 if !(200...299).contains(httpResponse.statusCode) {
                     Logger.printIfDebug(data: "Server error: \(httpResponse.statusCode)", logType: .error)
                     throw NetworkError.serverError(httpResponse.statusCode)
                 }
+                
                 if let jsonString = String(data: data, encoding: .utf8) {
                     Logger.printIfDebug(data: "Received JSON: \(jsonString)", logType: .success)
                 }
@@ -77,11 +84,14 @@ final class NetworkService: NetworkServiceProtocol {
             }
             .decode(type: T.self, decoder: JSONDecoder())
             .mapError { error in
+                if let networkError = error as? NetworkError {
+                    return networkError
+                }
+                
                 Logger.printIfDebug(data: "Decoding error: \(error.localizedDescription)", logType: .error)
                 return NetworkError.decodingError
             }
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
-
 }
