@@ -15,6 +15,7 @@ A lightweight, user-friendly SwiftUI app that allows users to search for domain 
 The app is built using SwiftUI and follows the MVVM (Model-View-ViewModel) architecture pattern. Key components include:
 
 - Protocol-oriented approach for flexible dependency injection
+- Integration with domainsdb API using URLSession and Combine framework for reactive networking
 - Custom network layer with comprehensive error handling
 - Debounced search to prevent excessive API calls
 - Elegant state management for different UI scenarios
