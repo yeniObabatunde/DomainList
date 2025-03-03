@@ -18,7 +18,6 @@ struct DomainSearchView: View {
                     .ignoresSafeArea()
                 
                 VStack(spacing: 0) {
-                   
                     SearchBarView(
                         text: $viewModel.searchText,
                         placeholder: Constants.Strings.searchForDomain
@@ -47,7 +46,6 @@ struct DomainSearchView: View {
                         
                     case .error(let message):
                         ErrorStateView(message: message) {
-                            // REMEBER TO FIX THIS IF THERE IS STILL TIME Re-trigger the search
                             let currentSearch = viewModel.searchText
                             viewModel.searchText = ""
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -59,6 +57,7 @@ struct DomainSearchView: View {
                 NavigationLink(
                     destination: selectedDomain.map { domain in
                         DomainPurchaseView(domain: domain, viewModel: viewModel)
+                            .padding(.horizontal, 15)
                     },
                     tag: true,
                     selection: Binding(
@@ -78,3 +77,4 @@ struct DomainSearchView: View {
 #Preview {
     DomainSearchView()
 }
+

@@ -62,6 +62,7 @@ struct DomainPurchaseView: View {
                     HStack(spacing: 12) {
                         Button(action: {}) {
                             Image(systemName: "minus")
+                                .foregroundColor(.black)
                                 .padding(8)
                                 .background(
                                     RoundedRectangle(cornerRadius: 4)
@@ -74,6 +75,7 @@ struct DomainPurchaseView: View {
                         
                         Button(action: {}) {
                             Image(systemName: "plus")
+                                .foregroundColor(.black)
                                 .padding(8)
                                 .background(
                                     RoundedRectangle(cornerRadius: 4)
@@ -126,15 +128,14 @@ struct DomainPurchaseView: View {
                         .background(Color.black)
                         .cornerRadius(28)
                 }
-                .padding(.vertical, 15)
             }
             .padding()
             .background(Color.white)
             .cornerRadius(16, corners: [.topLeft, .topRight])
             .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: -5)
         }
-        .navigationBarHidden(true)
         .background(Color(.systemGray6))
+        .navigationBarHidden(true)
         .alert("Success!", isPresented: $showingConfirmation) {
             Button("OK") {
                 isPurchased = true

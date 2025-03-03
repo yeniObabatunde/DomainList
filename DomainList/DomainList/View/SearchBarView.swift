@@ -12,7 +12,6 @@ struct SearchBarView: View {
     var placeholder: String
     
     var body: some View {
-        Spacer()
         HStack {
             Image(systemName: "magnifyingglass")
                 .foregroundColor(.gray)
@@ -25,6 +24,7 @@ struct SearchBarView: View {
                 
                 TextField("", text: $text)
                     .foregroundColor(.primary)
+                    .autocorrectionDisabled(true)
             }
             
             if !text.isEmpty {
@@ -36,8 +36,8 @@ struct SearchBarView: View {
                 }
             }
         }
-        .padding(10)
-        .background(Color(.systemGray6))
+        .padding(20)
+        .background(Color(.lightGray.withAlphaComponent(0.1)))
         .cornerRadius(8)
         .padding(.horizontal)
     }
