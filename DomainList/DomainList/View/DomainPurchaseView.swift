@@ -11,143 +11,61 @@ struct DomainPurchaseView: View {
     let domain: Domain
     @ObservedObject var viewModel: DomainSearchViewModel
     @Environment(\.dismiss) private var dismiss
-    @State private var isPurchased = false
+    
     @State private var showingConfirmation = false
+    @State private var showingSuccessPage = false
+    @State private var years = 1
     
     var body: some View {
-        VStack(spacing: 0) {
-            HStack {
-                Button(action: {
-                    dismiss()
-                }) {
-                    Image(systemName: "arrow.left")
-                        .foregroundColor(.black)
-                        .padding()
-                        .background(
-                            RoundedRectangle(cornerRadius: 8)
-                                .fill(Color.white)
-                        )
-                }
-                Spacer()
-            }
-            .padding()
-            .background(Color(.systemGray6))
-            
-            Text(domain.domain ?? "domainforsale.com")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .padding(.top, 40)
-            
-            Spacer()
-            
-            VStack(spacing: 20) {
-              
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Registration price")
-                        .font(.title3)
-                        .foregroundColor(.gray)
-                    
-                    Text("$\(Int(domain.price))")
-                        .font(.system(size: 60, weight: .bold))
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.top)
-            
-                HStack {
-                    Text("Years to register")
-                        .foregroundColor(.gray)
-                    
+        ZStack {
+            if !showingSuccessPage {
+                VStack(spacing: 0) {
+                    PurchaseHeaderView(
+                        domain: domain.domain ?? "domainforsale.com",
+                        dismissAction: { dismiss() }
+                    )
                     Spacer()
-                    
-                    HStack(spacing: 12) {
-                        Button(action: {}) {
-                            Image(systemName: "minus")
-                                .foregroundColor(.black)
-                                .padding(8)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 4)
-                                        .stroke(Color.gray, lineWidth: 1)
-                                )
-                        }
+                    VStack {
+                        PurchaseDetailsView(price: domain.price)
                         
-                        Text("1 year")
-                            .fontWeight(.medium)
-                        
-                        Button(action: {}) {
-                            Image(systemName: "plus")
-                                .foregroundColor(.black)
-                                .padding(8)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 4)
-                                        .stroke(Color.gray, lineWidth: 1)
-                                )
+                        PurchaseButtonView(action: {
+                            showingConfirmation = true
+                        })
+                    }
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(16, corners: [.topLeft, .topRight])
+                    .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: -5)
+                }
+                .background(Color(.systemGray6))
+                .navigationBarHidden(true)
+                .confirmationDialog(
+                    "Confirm Purchase",
+                    isPresented: $showingConfirmation,
+                    titleVisibility: .visible
+                ) {
+                    Button("Purchase \(domain.domain ?? "this domain")") {
+                        let success = viewModel.purchase(domain)
+                        if success {
+                            showingSuccessPage = true
                         }
                     }
-                }
-               
-                HStack {
-                    Text("Domain privacy")
-                        .foregroundColor(.gray)
-                    Spacer()
-                    Text("Included")
-                        .fontWeight(.medium)
-                }
-                HStack {
-                    Text("SSL certificate")
-                        .foregroundColor(.gray)
-                    Spacer()
-                    Text("Included")
-                        .fontWeight(.medium)
-                }
-                Divider()
-                    .padding(.vertical)
-                HStack {
-                    Text("Total")
-                        .font(.title2)
-                        .fontWeight(.bold)
                     
-                    Spacer()
-                    
-                    Text("$\(Int(domain.price))")
-                        .font(.title2)
-                        .fontWeight(.bold)
+                    Button("Cancel", role: .cancel) {}
+                } message: {
+                    Text("Are you sure you want to purchase this domain for $\(Int(domain.price))?")
                 }
-                
-                Button(action: {
-                    let success = viewModel.purchase(domain)
-                    if success {
-                        showingConfirmation = true
-                    }
-                }) {
-                    Text("Purchase domain")
-                        .font(.title3)
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.black)
-                        .cornerRadius(28)
-                }
-            }
-            .padding()
-            .background(Color.white)
-            .cornerRadius(16, corners: [.topLeft, .topRight])
-            .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: -5)
-        }
-        .background(Color(.systemGray6))
-        .navigationBarHidden(true)
-        .alert("Success!", isPresented: $showingConfirmation) {
-            Button("OK") {
-                isPurchased = true
-                dismiss()
-            }
-        } message: {
-            Text("You have successfully purchased \(domain.domain ?? "this domain")")
-        }
-        .onChange(of: isPurchased) { newValue in
-            if newValue {
-                dismiss()
+            } else {
+                SuccessPageView(
+                    domain: domain.domain ?? "this domain",
+                    dismissAction: { dismiss() }
+                )
             }
         }
+        .padding(.horizontal, 15)
     }
+}
+
+#Preview {
+    DomainPurchaseView(domain: Domain.example, viewModel: DomainSearchViewModel())
 }

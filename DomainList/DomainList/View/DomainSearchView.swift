@@ -57,7 +57,6 @@ struct DomainSearchView: View {
                 NavigationLink(
                     destination: selectedDomain.map { domain in
                         DomainPurchaseView(domain: domain, viewModel: viewModel)
-                            .padding(.horizontal, 15)
                     },
                     tag: true,
                     selection: Binding(
