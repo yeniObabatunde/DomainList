@@ -23,7 +23,7 @@ final class DomainListService: DomainServiceProtocol {
     
     func searchDomains(query: String) -> AnyPublisher<DomainResponse, NetworkError> {
         
-        let queryItems = [URLQueryItem(name: "search", value: String(query))]
+        let queryItems = [URLQueryItem(name: "domain", value: String(query))]
         
         return networkService.request(
             type: DomainResponse.self, endpoint: Constants.Endpooint.search,
